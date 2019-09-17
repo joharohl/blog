@@ -1,8 +1,38 @@
 ---
 layout: post
-title:  "It's alive!"
-date:   2019-05-24 16:48:07 +0200
-categories: jekyll woho
+title:  "Ansible docker_image module and WSL"
+date:   2019-09-17 09:32 +0200
+categories: ansible docker wsl
 ---
-Up and running!
+Getting docker for desktop working in WSL is as easy as exposing the 
+docker socket over tcp and setting `DOCKER_HOST=tcp://localhost:2375`.
 
+However, when trying to use the `docker_image` module in Ansible, the following error
+appeared: 
+
+```
+failed: [localhost] (item=ansible) => {
+    "ansible_loop_var": "item", 
+    "changed": false, 
+    "item": "ansible", 
+    "msg": "Error pushing image <image name>: docker-credential-desktop not 
+            installed or not available in PATH"
+}
+```
+
+Turs out there is no `docker-credential-desktop` available by default. At least with the
+lastest docker for desktop. So let's create our own:
+
+<figure>
+  <figcaption>/usr/local/bin/docker-credential-desktop</figcaption>
+
+{% highlight bash %}
+#!/bin/bash
+
+"/mnt/c/Program Files/Docker/Docker/Resources/bin/docker-credential-desktop.exe" $@
+{% endhighlight %}
+
+</figure>
+
+You might obviously need to tweak the path depending on your installation. 
+Enjoy all the `docker_image` goodness.

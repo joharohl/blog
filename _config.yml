@@ -23,6 +23,8 @@ url: "http://blog.rohlen.net" # the base hostname & protocol for your site, e.g.
 twitter_username: joharohl
 github_username:  joharohl
 
+highlighter: rouge
+
 # Build settings
 markdown: kramdown
 theme: minima
